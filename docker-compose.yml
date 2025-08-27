@@ -2,28 +2,29 @@ services:
   redis:
     restart: unless-stopped
     image: redis:latest
+    volumes:
+      - redis_data:/var/lib/redis/data/
     expose:
-      - 6379 
+      - 6379
 
   db:
     image: postgres:latest
     restart: unless-stopped
-    volumes: 
+    volumes:
       - postgres_data:/var/lib/postgresql/data/
-    environment: 
-      POSTGRES_DB: listing_db 
+    environment:
+      POSTGRES_DB: listing_db
       POSTGRES_USER: root
       POSTGRES_PASSWORD: password
     expose:
       - 5432
-  
+
   web:
     build: ./app
-    ports: 
+    ports:
       - 8000:8000
     depends_on:
       - db
 
 volumes:
   postgres_data:
-
