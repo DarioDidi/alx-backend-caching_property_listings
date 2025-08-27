@@ -3,14 +3,12 @@ from django_redis import get_redis_connection
 
 from .models import Property
 
-from django.core.cache import cache
 import logging
 
-# Set up logging
 logger = logging.getLogger(__name__)
 
 
-def getallproperties():
+def get_all_properties():
     queryset = cache.get('all_properties')
     if not queryset:
         queryset = Property.objects.all()
@@ -28,9 +26,9 @@ def get_redis_cache_metrics():
         keyspace_hits = info_data.get('keyspace_hits', 0)
         keyspace_misses = info_data.get('keyspace_misses', 0)
 
-        total_accesses = keyspace_hits + keyspace_misses
-        if total_accesses > 0:
-            hit_ratio = keyspace_hits / total_accesses
+        total_requests = keyspace_hits + keyspace_misses
+        if total_requests > 0:
+            hit_ratio = keyspace_hits / total_requests
         else:
             hit_ratio = 0.0
 
@@ -38,7 +36,7 @@ def get_redis_cache_metrics():
             'keyspace_hits': keyspace_hits,
             'keyspace_misses': keyspace_misses,
             'hit_ratio': hit_ratio,
-            'total_accesses': total_accesses
+            'total_requests': total_requests
         }
 
         logger.info(

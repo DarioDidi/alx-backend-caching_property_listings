@@ -1,4 +1,4 @@
-from .utils import getallproperties
+from .utils import get_all_properties
 
 from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_cookie
@@ -11,5 +11,5 @@ from rest_framework.decorators import api_view
 @vary_on_cookie
 @api_view(["GET"])
 def property_list(request):
-    content = {"properties": getallproperties()}
+    content = {"properties": get_all_properties()}
     return JsonResponse({"data": content})
